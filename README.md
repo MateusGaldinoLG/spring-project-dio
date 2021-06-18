@@ -7,6 +7,7 @@ Java project for the Avanade Spring Boot course. Created as a simple Person API 
 * PostgreSQL
 * Lombok
 * Spring Web
+* Mapstruct
 * Heroku (deploy)
 
 ## Deploy
