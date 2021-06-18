@@ -1,7 +1,7 @@
 package one.digitalinnovation.project.personapi.service;
 
 import java.util.List;
-import java.util.Optional;
+//import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,10 @@ public class PersonService {
     private PersonRepository personRepository;
     private final PersonMapper personMapper;
 
+    private Person verifyIfExists(Long id) throws PersonNotFoundException{
+        return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+    }
+
     //DTO to Entity using mapstruct
     public MessageResponseDTO createPerson(PersonDTO personDTO){
         //System.out.println(personDTO);
@@ -40,10 +44,13 @@ public class PersonService {
     }
 
     public PersonDTO findById(Long id) throws PersonNotFoundException{
-        Optional<Person> optionalPerson = personRepository.findById(id);
-        if(optionalPerson.isEmpty()){
-            throw new PersonNotFoundException(id);
-        }
-        return personMapper.toDTO(optionalPerson.get());
+        //Optional<Person> optionalPerson = personRepository.findById(id);
+        Person person = verifyIfExists(id);
+        return personMapper.toDTO(person);
+    }
+
+    public void delete(Long id) throws PersonNotFoundException{
+        verifyIfExists(id);
+        personRepository.deleteById(id);
     }
 }
